@@ -1,7 +1,6 @@
 // const palette = require('./Palette.js');
 
 // palette generator
-
 const getRandomHexCode = () => {
   const hexChars = '0123456789ABCDEF';
   let hex = '#';
@@ -16,9 +15,17 @@ const getRandomHexCode = () => {
 };
 
 const generatePalette = () => {
+  let palette = []
+
   for (let i = 1; i <= 5; i++) {
     let colorCode = getRandomHexCode();
+    
+    while (palette.find(color => color === colorCode)) {
+      colorCode = getRandomHexCode();
+    }
+     
     $('.box' + i).css('background-color', colorCode);
+    palette.push(colorCode);
   }
 };
 
