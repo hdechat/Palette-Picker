@@ -1,3 +1,4 @@
+// palette generator
 const getRandomHexCode = () => {
   const hexChars = '0123456789ABCDEF';
   let hex = '#';
@@ -18,3 +19,23 @@ const generatePalette = () => {
 };
 
 $('.generate-palette-button').on('click', generatePalette);
+
+// save palette
+function Palette() {
+  this.id = Date.now();
+  this.name = $('.input-palette-name').val();
+}
+
+const appendPalette = (newPalette) => {
+  $('.saved-palettes').append(`
+    <li id=${newPalette.id}>${newPalette.name}
+    </li>
+  `);
+}
+
+const addToSavedPalettes = () => {
+  let newPalette = new Palette();
+  appendPalette(newPalette);
+};
+
+$('.save-palette-button').on('click', addToSavedPalettes);
