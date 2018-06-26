@@ -95,3 +95,11 @@ li {
   border-radius: 0%;
   font-size: 12px;
 }
+
+.saved-palette {
+  border: solid thin;
+  display: inline-block;
+  height: 25px;
+  margin: 2px 5px;
+  width: 25px;
+}
