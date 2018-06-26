@@ -15,11 +15,11 @@ const getRandomHexCode = () => {
 };
 
 const generatePalette = () => {
-  let palette = []
+  let palette = [];
 
   for (let i = 1; i <= 5; i++) {
     let colorCode = getRandomHexCode();
-    
+
     while (palette.find(color => color === colorCode)) {
       colorCode = getRandomHexCode();
     }
@@ -44,7 +44,7 @@ function Palette() {
   ];
 }
 
-const appendPalette = (newPalette) => {
+const appendPalettes = (newPalette) => {
   $('.saved-palettes').append(`
     <li id=${newPalette.id}>${newPalette.name}
       <div class="saved-palette" style="background-color: ${newPalette.colors[0]}" ></div>
@@ -58,8 +58,37 @@ const appendPalette = (newPalette) => {
 
 const addToSavedPalettes = () => {
   let newPalette = new Palette();
-  appendPalette(newPalette);
+  appendPalettes(newPalette);
   $('.input-palette-name').val('');
 };
 
 $('.save-palette-button').on('click', addToSavedPalettes);
+
+// create new Project
+let projectList = [];
+
+function Project() {
+  this.id = Date.now();
+  this.name = $('.input-project-name').val();
+}
+
+const appendProjects = (newProject) => {
+  $('.saved-projects').append(`<li id=${newProject.id}>${newProject.name}</li>`);
+}
+
+const addToSavedProjects = () => {
+  let newProject = new Project;
+  if (projectList.find(name => name === newProject.name)) {
+    duplicateNameResponse(newProject.name);
+  } else {
+    projectList.push(newProject.name);
+    appendProjects(newProject);
+  }
+  $('.input-project-name').val('');
+}
+
+const duplicateNameResponse = (name) => {
+  alert(`"${name}" has already been used. Please rename your project.`);
+}
+
+$('.save-project-button').on('click', addToSavedProjects);
