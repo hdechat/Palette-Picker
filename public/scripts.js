@@ -12,11 +12,9 @@ const getRandomHexCode = () => {
 };
 
 const generatePalette = () => {
-  $('.box1').css('background-color', getRandomHexCode());
-  $('.box2').css('background-color', getRandomHexCode());
-  $('.box3').css('background-color', getRandomHexCode());
-  $('.box4').css('background-color', getRandomHexCode());
-  $('.box5').css('background-color', getRandomHexCode());
+  for (let i = 1; i <= 5; i++) {
+    $('.box' + i).css('background-color', getRandomHexCode());
+  }
 };
 
 $('.generate-palette-button').on('click', generatePalette);
