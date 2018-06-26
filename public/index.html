@@ -1,0 +1,49 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Palette Picker</title>
+    <link rel="stylesheet" type="text/css" href="styles.css">
+  </head>
+  <body>
+    <header>
+      <h1 class="title">Palette Picker</h1>
+    </header>
+    <hr />
+    <section class="palette-generator">
+      <div class="color box1"></div>
+      <div class="color box2"></div>
+      <div class="color box3"></div>
+      <div class="color box4"></div>
+      <div class="color box5"></div>
+    </section>
+    <button class="generate-palette-button">Pick Me Some Colors!</button>
+    <hr />
+    <input 
+      class="input-palette-name" 
+      type="text" 
+      placeholder="Give this palette a name" />
+    <button class="save-palette-button">Save Palette</button>
+    <button class="save-to-project-button">Save Palette to Project</button>
+    <p class="directions">(First select a palette on left and a project on right)</p>
+    <article class="saved-items-container">
+      <h3>PALETTES</h3>
+      <ul class="saved-palettes"></ul>
+    </article>
+    <article class="saved-items-container">
+      <h3>PROJECTS</h3>
+      <ul class="saved-projects">
+        <li class="create-new-project">
+          <input class="input-project-name" type="text" placeholder="Enter project name">
+          <button class="save-project-button">Create New Project</button>
+        </li>
+      </ul>
+    </article>
+  </body>
+  <script 
+    src="http://code.jquery.com/jquery-3.3.1.js"
+    integrity="sha256-2Kok7MbOyxpgUVvAk/HJ2jigOSYS2auK4Pfzbm7uH60="
+    crossorigin="anonymouse"></script>
+  <script src="script.js"></script>
+</html>

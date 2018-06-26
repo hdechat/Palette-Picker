@@ -1,0 +1,97 @@
+body {
+  margin: auto;
+  text-align: center;
+  width: 65vw;
+}
+
+article h3 {
+  margin: 0;
+}
+
+ul {
+  list-style: none;
+}
+
+li {
+  margin-left: 5px;
+}
+
+.title {
+  margin: 20px auto 0 auto;
+}
+
+.palette-generator {
+  display: flex;
+  justify-content: space-between;
+  margin: 30px auto 15px auto;
+}
+
+.color {
+  border: solid;
+  height: 150px;
+  width: 18%;
+}
+
+.generate-palette-button {
+  font-size: 20px;
+  height: 35px;
+  width: 100%;
+}
+
+.input-palette-name {
+  height: 35px;
+  float: left;
+  font-size: 16px;
+  width: 75%;
+}
+
+.save-palette-button {
+  height: 41px;
+  float: right;
+  font-size: 16px;
+  width: 23%;
+}
+
+.directions {
+  font-size: 20px;
+  margin: 0px;
+}
+
+.save-to-project-button {
+  display: block;
+  font-size: 20px;
+  height: 41px;
+  margin: 100px auto 0px auto;
+  width: 80%;
+}
+
+.saved-items-container {
+  display: inline-block;
+  margin-top: 18px;
+  width: 40%;
+}
+
+.saved-palettes, .saved-projects {
+  border: solid thin;
+  display: inline-block;
+  height: 200px;
+  margin-top: 0px;
+  padding: 0px;
+  text-align: left;
+  vertical-align: top;
+  width: 100%;
+}
+
+.create-new-project {
+  margin-top: 5px;
+}
+
+.input-project-name {
+  font-size: 12px;
+  width: 60%;
+}
+
+.save-project-button {
+  border-radius: 0%;
+  font-size: 12px;
+}
