@@ -71,7 +71,7 @@ li {
   width: 40%;
 }
 
-.saved-palettes, .saved-projects {
+.saved-palettes-list, .saved-projects-list {
   border: solid thin;
   display: inline-block;
   height: 200px;
