@@ -1,7 +1,9 @@
 const express = require('express');
 const app = express();
+const bodyParser = require('body-parser');
 
 app.set('port', process.env.PORT || 8000);
+
 app.locals.projects = [
   {id: 12345, name: 'ProjAlpha'},
   {id: 23456, name: 'ProjBeta'},
@@ -12,6 +14,7 @@ app.locals.palettes = [
   {id: 2, name: 'earth', palette: ['#8F3B1B', '#D57500', '#DBCA69', '#404F24', '#668D3C'], project_id: null}
 ];
 
+app.use(bodyParser.json());
 app.use(express.static('public'));
 
 app.get('/', (request, response) => {});
@@ -22,7 +25,8 @@ app.get('/api/v1/projects', (request, response) => {
 
 app.get('/api/v1/projects/:id', (request, response) => {
   const { id } = request.params;
-  const project = app.locals.projects.find(project => project.id === parseInt(id));
+  const project = app.locals.projects.find(project => project.id.toString() === id);
+  console.log(project)
 
   response.status(200).json(project);
 });
@@ -33,9 +37,33 @@ app.get('/api/v1/palettes', (request, response) => {
 
 app.get('/api/v1/palettes/:id', (request, response) => {
   const { id } = request.params;
-  const palette = app.locals.palettes.find(palette => palette.id === parseInt(id));
+  const palette = app.locals.palettes.find(palette => palette.id.toString() === id);
   
   response.status(200).json(palette);
+});
+
+app.post('/api/v1/projects', (request, response) => {
+  const id = Date.now().toString();
+  const { name } = request.body;
+
+  if (!name) {
+    response.status(422).send({ error: 'No name property provided' });
+  } else {
+    app.locals.projects.push({ id, name });
+    response.status(201).json({ id, name });
+  }
+});
+
+app.post('/api/v1/palettes', (request, response) => {
+  const id = Date.now().toString();
+  const { name, palette } = request.body;
+
+  if (!name || !palette) {
+    response.status(422).send({ error: 'Please provide both name and palette properties' });
+  } else {
+    app.locals.palettes.push({ id, name, palette });
+    response.status(201).json({ id, name, palette });
+  }
 });
 
 app.listen(app.get('port'), () => {
