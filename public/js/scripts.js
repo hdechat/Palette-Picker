@@ -1,5 +1,3 @@
-// const palette = require('./Palette.js');
-
 // palette generator
 const getRandomHexCode = () => {
   const hexChars = '0123456789ABCDEF';
@@ -112,8 +110,7 @@ $('.saved-projects-list').on('click', '.project', selectProject);
 
 
 const addPaletteToProject = () => {
-  console.log(selectedPalette)
-  $(selectedProject).append(selectedPalette)
+  $(selectedProject).append(selectedPalette);
 }
 
 $('.save-to-project-button').on('click', addPaletteToProject);

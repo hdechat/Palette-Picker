@@ -1,14 +1,30 @@
-export default class Palette {
-  constructor(name, colors = []) {
-    this.id = Date.now(),
-    this.name = name,
-    this.colors = colors
+const getRandomHexCode = () => {
+  const hexChars = '0123456789ABCDEF';
+  let hex = '#';
+
+  while (hex.length < 7) {
+    const randomIndex = Math.floor(Math.random() * 16)
+
+    hex += hexChars[randomIndex];
   }
 
-  appendPalette () {
-  $('.saved-palettes').append(`
-    <li id=${this.id}>${this.name}
-    </li>
-  `);
-  }  
-}
+  return hex;
+};
+
+const generatePalette = () => {
+  let palette = [];
+
+  for (let i = 1; i <= 5; i++) {
+    let colorCode = getRandomHexCode();
+
+    while (palette.find(color => color === colorCode)) {
+      colorCode = getRandomHexCode();
+    }
+     
+    palette.push(colorCode);
+  }
+
+  return palette;
+};
+
+module.exports = generatePalette;
