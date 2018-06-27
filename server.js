@@ -27,7 +27,11 @@ app.get('/api/v1/projects/:id', (request, response) => {
   const { id } = request.params;
   const project = app.locals.projects.find(project => project.id.toString() === id);
 
-  response.status(200).json(project);
+  if (!project) {
+    response.status(404).send('SORRY! ID DOES NOT EXIST');
+  } else {
+    response.status(200).json(project);
+  }
 });
 
 app.get('/api/v1/palettes', (request, response) => {
@@ -38,7 +42,11 @@ app.get('/api/v1/palettes/:id', (request, response) => {
   const { id } = request.params;
   const palette = app.locals.palettes.find(palette => palette.id.toString() === id);
   
-  response.status(200).json(palette);
+  if(!palette) {
+    response.status(404).send('SORRY! ID DOES NOT EXIST');
+  } else {
+    response.status(200).json(palette);
+  }
 });
 
 app.post('/api/v1/projects', (request, response) => {
