@@ -2,129 +2,138 @@ const express = require('express');
 const app = express();
 const bodyParser = require('body-parser');
 
+app.use(bodyParser.json());
+
 app.set('port', process.env.PORT || 8000);
 
-app.locals.projects = [
-  {id: 12345, name: 'ProjAlpha'},
-  {id: 23456, name: 'ProjBeta'},
-  {id: 34567, name: 'ProjGamma'}
-];
-app.locals.palettes = [
-  {id: 1, name: 'spring', palette: ['#ECDB54', '#00A68C', '#E34132', '#645394', '#6CAODC'], project_id: 12345 },
-  {id: 2, name: 'earth', palette: ['#8F3B1B', '#D57500', '#DBCA69', '#404F24', '#668D3C'], project_id: null}
-];
+const environment = process.env.NODE_ENV || 'development';
+const configuration = require('./knexfile')[environment];
+const database = require('knex')(configuration);
 
-app.use(bodyParser.json());
 app.use(express.static('public'));
 
 app.get('/', (request, response) => {});
 
 app.get('/api/v1/projects', (request, response) => {
-  response.status(200).json(app.locals.projects);
+  database('projects').select()
+    .then(projects => response.status(200).json(projects))
+    .catch(error => response.status(500).json({ error}));
 });
 
 app.get('/api/v1/projects/:id', (request, response) => {
-  const { id } = request.params;
-  const project = app.locals.projects.find(project => project.id.toString() === id);
-
-  if (!project) {
-    response.status(404).send('SORRY! ID DOES NOT EXIST');
-  } else {
-    response.status(200).json(project);
-  }
+  database('projects').where('id', request.params.id).select()
+    .then(project => {
+      project.length 
+        ? response.status(200).json(project)
+        : response.status(404).json({error: `Could not find project with id: ${request.params.id}`});
+    })
+    .catch(error => response.status(500).json({ error }));
 });
 
 app.get('/api/v1/palettes', (request, response) => {
-  response.status(200).json(app.locals.palettes);
+  database('palettes').select()
+    .then(palettes => response.status(200).json(palettes))
+    .catch(error => response.status(500).json({ error }));
 });
 
 app.get('/api/v1/palettes/:id', (request, response) => {
-  const { id } = request.params;
-  const palette = app.locals.palettes.find(palette => palette.id.toString() === id);
-  
-  if(!palette) {
-    response.status(404).send('SORRY! ID DOES NOT EXIST');
-  } else {
-    response.status(200).json(palette);
-  }
+ database('palettes').where('id', request.params.id).select()
+  .then(palette => {
+    palette.length
+      ? response.status(200).json(palette)
+      : response.status(404).json({error: `Could not find project with id: ${request.params.id}`});
+  })
+  .catch(error => response.status(500).json({ error }));
 });
 
 app.post('/api/v1/projects', (request, response) => {
-  const id = Date.now().toString();
-  const { name } = request.body;
+  const project = request.body;
 
-  if (!name) {
-    response.status(422).send({ error: 'No name property provided' });
+  if (!project.name || project.name === undefined) {
+    response.status(422).send({ 
+      error: `Expected format: { name: <String> }. You're missing a name property.`
+    });
   } else {
-    app.locals.projects.push({ id, name });
-    response.status(201).json({ id, name });
+    database('projects').insert(project, 'id')
+      .then(project => response.status(201).json({ id: project[0] }))
+      .catch(error => response.status(500).json({ error }));
   }
 });
 
 app.post('/api/v1/palettes', (request, response) => {
-  const id = Date.now().toString();
-  const { name, palette } = request.body;
+  const palette = request.body;
 
-  if (!name || !palette) {
-    response.status(422).send({ error: 'Please provide both name and palette properties' });
-  } else {
-    app.locals.palettes.push({ id, name, palette });
-    response.status(201).json({ id, name, palette });
+  for (let requiredParameter of ['name', 'color1', 'color2', 'color3', 'color4', 'color5']) {
+    if (!palette[requiredParameter]) {
+      return response.status(422).send({
+        error: `Expected format 
+          { 
+            name: <String>, 
+            color1: <String>, 
+            color2: <String>, 
+            color3: <String>, 
+            color4: <String>, 
+            color5: <String>
+          }. You're missing a "${requiredParameter}" property.`
+      });
+    }
   }
+
+  database('palettes').insert(palette, 'id')
+    .then(palette => response.status(201).json({ id: palette[0]}))
+    .catch(error => response.status(500).json({ error}));
 });
 
 app.put('/api/v1/projects/:id', (request, response) => {
-  const { id } = request.params;
-  const { name } = request.body;
-  const updatedProject = app.locals.projects.findIndex(project => project.id.toString() === id);
+  const update = request.body;
 
-  if (updatedProject < 0) {
-    response.status(404).send('SORRY! ID DOES NOT EXIST');
-  } else if (!name) {
-    response.status(422).send({ error: 'No name property provided. Object remains unchanged' });
-  } else {
-    app.locals.projects.splice(updatedProject, 1, { id, name });
-    response.status(200).json({ id, name });
-  }
+  database('projects').where('id', request.params.id).update(update)
+    .then(project => {
+      project
+       ? response.status(200).json({ update: "successful" })
+       : response.status(404).json({ error: `Could not find project with id: ${request.params.id}`})
+    })
+    .catch(error => response.status(500).json({ error }));
 });
 
 app.put('/api/v1/palettes/:id', (request, response) => {
-  const { id } = request.params;
-  const { name, palette, project_id } = request.body;
-  const updatedPalette = app.locals.palettes.find(palette => palette.id.toString() === id);
+  const update = request.body;
 
-  if (updatedPalette < 0) {
-    response.status(404).send('SORRY! ID DOES NOT EXIST');
-  } else if (!name || !palette || !project_id) {
-    response.status(422).send({ error: 'Required properties not provided. Please provide name, palette, and project_id properties'});
-  } else {
-    app.locals.palettes.splice(updatedPalette, 1, { id, name, palette, project_id });
-    response.status(200).json({ id, name, palette, project_id });
-  }
+  database('palettes').where('id', request.params.id).update(update)
+    .then(palette => {
+      palette
+        ? response.status(200).json({ update: "successful"})
+        : response.status(404).json({ error: `Could not find project with id: ${request.params.id}`})
+    })
+    .catch(error => response.status(500).json({ error }));
 });
 
 app.delete('/api/v1/projects/:id', (request, response) => {
-  const { id } = request.params;
-  const deletedProject = app.locals.projects.findIndex(project => project.id.toString() === id);
-
-  if(deletedProject < 0) {
-    response.status(404).send('SORRY! ID DOES NOT EXIST');
-  } else {
-    app.locals.projects.splice(deletedProject, 1);
-    response.status(200).json({ id });
-  }
+  database('projects').where('id', request.params.id).select()
+    .then(project => {
+      if (!project.length) {
+        response.status(404).json({error: `Could not find project with id: ${request.params.id}`});
+      } else {
+        database('projects').where('id', request.params.id).delete()
+          .then(() => response.sendStatus(204))
+          .catch(error => response(500).json({ error }));
+      }
+    })
+    .catch(error => response.status(500).json({ error }));
 });
 
 app.delete('/api/v1/palettes/:id', (request, response) => {
-  const { id } = request.params;
-  const deletedPalette = app.locals.palettes.findIndex(palette => palette.id.toString() === id);
-
-  if(deletedPalette < 0) {
-    response.status(404).send('SORRY! ID DOES NOT EXIST');
-  } else {
-    app.locals.palettes.splice(deletedPalette, 1);
-    response.status(200).json({ id });
-  }
+  database('palettes').where('id', request.params.id).select()
+    .then(palette => {
+      if (!palette.length) {
+        response.status(404).json({error: `Could not find palette with id: ${request.params.id}`});
+      } else {
+        database('palettes').where('id', request.params.id).delete()
+          .then(() => response.sendStatus(204))
+          .catch(error => response(500).json({ error }));
+      }
+    })
+    .catch(error => response.status(500).json({ error }));
 });
 
 app.listen(app.get('port'), () => {
