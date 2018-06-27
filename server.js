@@ -95,6 +95,30 @@ app.put('/api/v1/palettes/:id', (request, response) => {
   }
 });
 
+app.delete('/api/v1/projects/:id', (request, response) => {
+  const { id } = request.params;
+  const deletedProject = app.locals.projects.findIndex(project => project.id.toString() === id);
+
+  if(deletedProject < 0) {
+    response.status(404).send('SORRY! ID DOES NOT EXIST');
+  } else {
+    app.locals.projects.splice(deletedProject, 1);
+    response.status(200).json({ id });
+  }
+});
+
+app.delete('/api/v1/palettes/:id', (request, response) => {
+  const { id } = request.params;
+  const deletedPalette = app.locals.palettes.findIndex(palette => palette.id.toString() === id);
+
+  if(deletedPalette < 0) {
+    response.status(404).send('SORRY! ID DOES NOT EXIST');
+  } else {
+    app.locals.palettes.splice(deletedPalette, 1);
+    response.status(200).json({ id });
+  }
+});
+
 app.listen(app.get('port'), () => {
   console.log('Palette Picker listening on 8000');
 });
@@ -102,3 +126,4 @@ app.listen(app.get('port'), () => {
 app.use((request, response, next) => {
   response.status(404).send('SORRY! PAGE NOT FOUND');
 });
+
