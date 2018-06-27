@@ -26,7 +26,6 @@ app.get('/api/v1/projects', (request, response) => {
 app.get('/api/v1/projects/:id', (request, response) => {
   const { id } = request.params;
   const project = app.locals.projects.find(project => project.id.toString() === id);
-  console.log(project)
 
   response.status(200).json(project);
 });
@@ -63,6 +62,36 @@ app.post('/api/v1/palettes', (request, response) => {
   } else {
     app.locals.palettes.push({ id, name, palette });
     response.status(201).json({ id, name, palette });
+  }
+});
+
+app.put('/api/v1/projects/:id', (request, response) => {
+  const { id } = request.params;
+  const { name } = request.body;
+  const updatedProject = app.locals.projects.findIndex(project => project.id.toString() === id);
+
+  if (updatedProject < 0) {
+    response.status(404).send('SORRY! ID DOES NOT EXIST');
+  } else if (!name) {
+    response.status(422).send({ error: 'No name property provided. Object remains unchanged' });
+  } else {
+    app.locals.projects.splice(updatedProject, 1, { id, name });
+    response.status(200).json({ id, name });
+  }
+});
+
+app.put('/api/v1/palettes/:id', (request, response) => {
+  const { id } = request.params;
+  const { name, palette, project_id } = request.body;
+  const updatedPalette = app.locals.palettes.find(palette => palette.id.toString() === id);
+
+  if (updatedPalette < 0) {
+    response.status(404).send('SORRY! ID DOES NOT EXIST');
+  } else if (!name || !palette || !project_id) {
+    response.status(422).send({ error: 'Required properties not provided. Please provide name, palette, and project_id properties'});
+  } else {
+    app.locals.palettes.splice(updatedPalette, 1, { id, name, palette, project_id });
+    response.status(200).json({ id, name, palette, project_id });
   }
 });
 
