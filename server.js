@@ -48,7 +48,7 @@ app.get('/api/v1/palettes/:id', (request, response) => {
 
 app.post('/api/v1/projects', (request, response) => {
   const project = request.body;
-
+  console.log(request.body)
   if (!project.name || project.name === undefined) {
     response.status(422).send({ 
       error: `Expected format: { name: <String> }. You're missing a name property.`

@@ -62,31 +62,18 @@ const addToSavedPalettes = () => {
 
 $('.save-palette-button').on('click', addToSavedPalettes);
 
-// create new Project
-let projectList = [];
-
-function Project() {
-  this.id = Date.now();
-  this.name = $('.input-project-name').val();
-}
-
-const appendProjects = (newProject) => {
-  $('.saved-projects-list').append(`<ul class="project" id=${newProject.id}>${newProject.name}</ul>`);
-}
-
 const addToSavedProjects = () => {
-  let newProject = new Project;
-  if (projectList.find(name => name === newProject.name)) {
-    duplicateNameResponse(newProject.name);
-  } else {
-    projectList.push(newProject.name);
-    appendProjects(newProject);
-  }
-  $('.input-project-name').val('');
-}
+  const name = $('.input-project-name').val();
 
-const duplicateNameResponse = (name) => {
-  alert(`"${name}" has already been used. Please rename your project.`);
+  fetch('http://localhost:8000/api/v1/projects', {
+    body: JSON.stringify({ name }),
+    method: 'POST',
+    headers: {
+      'content-type': 'application/json'
+    }
+  })
+    .then(response => response.json())
+    .then(data => console.log(data));
 }
 
 $('.save-project-button').on('click', addToSavedProjects);
