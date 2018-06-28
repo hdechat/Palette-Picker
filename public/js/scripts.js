@@ -1,4 +1,3 @@
-// palette generator
 const getRandomHexCode = () => {
   const hexChars = '0123456789ABCDEF';
   let hex = '#';
@@ -73,6 +72,19 @@ const addToSavedPalettes = () => {
 
 $('.save-palette-button').on('click', addToSavedPalettes);
 
+const appendProjects = (projectId) => {
+  fetch(`http://localhost:8000/api/v1/projects/${projectId}`)
+    .then(response => response.json())
+    .then(project => {
+      const { id, name } = project[0];
+
+      $('.saved-projects-list').append(`
+        <li class="palette" id=${id}>${name}</li>
+      `);
+
+    });
+}
+
 const addToSavedProjects = () => {
   const name = $('.input-project-name').val();
 
@@ -84,7 +96,7 @@ const addToSavedProjects = () => {
     }
   })
   .then(response => response.json())
-  .then(data => console.log(data));
+  .then(data => appendProjects(data.id));
 }
 
 $('.save-project-button').on('click', addToSavedProjects);
@@ -109,6 +121,7 @@ $('.saved-projects-list').on('click', '.project', selectProject);
 
 const addPaletteToProject = () => {
   $(selectedProject).append(selectedPalette);
+  console.log(selectedPalette)
 }
 
 $('.save-to-project-button').on('click', addPaletteToProject);
