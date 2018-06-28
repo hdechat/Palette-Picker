@@ -117,9 +117,25 @@ function selectProject() {
 $('.saved-palettes-list').on('click', '.palette', selectPalette);
 $('.saved-projects-list').on('click', '.project', selectProject);
 
+const addForeignKeyToPalette = (paletteId, projectId) => {
+  fetch(`http://localhost:8000/api/v1/palettes/${paletteId}`, {
+    body: JSON.stringify({ project_id: projectId }),
+    method: 'PUT',
+    headers: {
+      'content-type': 'application/json'
+    }
+  })
+  .then(response => response.json())
+  .then(data => console.log(data));
+}
 
 const addPaletteToProject = () => {
   $(selectedProject).append(selectedPalette);
+
+  const paletteId = selectedPalette[0].id;
+  const projectId = selectedProject.id;
+
+  addForeignKeyToPalette(paletteId, projectId);
 }
 
 $('.save-to-project-button').on('click', addPaletteToProject);
