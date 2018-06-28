@@ -127,6 +127,18 @@ let selectedProject;
 function selectPalette() {
   $(this).css('border', 'solid thin');
   selectedPalette = $(this).clone();
+
+  fetch(`http://localhost:8000/api/v1/palettes/${this.id}`)
+  .then(response => response.json())
+  .then(palette => {
+    const { color1, color2, color3, color4, color5 } = palette[0];
+
+    $('.box1').css('background-color', color1);
+    $('.box2').css('background-color', color2);
+    $('.box3').css('background-color', color3);
+    $('.box4').css('background-color', color4);
+    $('.box5').css('background-color', color5);
+  });
 }
 
 function selectProject() {
@@ -134,7 +146,7 @@ function selectProject() {
   selectedProject = this;
 }
 
-$('.saved-palettes-list').on('click', '.palette', selectPalette);
+$('.saved-items-container').on('click', '.palette', selectPalette);
 $('.saved-projects-list').on('click', '.project', selectProject);
 
 const addForeignKeyToPalette = (paletteId, projectId) => {
