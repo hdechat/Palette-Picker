@@ -48,7 +48,6 @@ app.get('/api/v1/palettes/:id', (request, response) => {
 
 app.post('/api/v1/projects', (request, response) => {
   const project = request.body;
-  console.log(request.body)
   if (!project.name || project.name === undefined) {
     response.status(422).send({ 
       error: `Expected format: { name: <String> }. You're missing a name property.`
@@ -116,7 +115,7 @@ app.delete('/api/v1/projects/:id', (request, response) => {
       } else {
         database('projects').where('id', request.params.id).delete()
           .then(() => response.sendStatus(204))
-          .catch(error => response(500).json({ error }));
+          .catch(error => response.status(500).json({ error }));
       }
     })
     .catch(error => response.status(500).json({ error }));

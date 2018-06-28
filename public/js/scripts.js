@@ -1,3 +1,4 @@
+
 const getRandomHexCode = () => {
   const hexChars = '0123456789ABCDEF';
   let hex = '#';
@@ -36,16 +37,18 @@ const appendPalettes = (paletteId) => {
 
       $('.saved-palettes-list').append(`
         <li class="palette" id=${id}>${name}
-          <div class="saved-palette" style="background-color: ${color1}" ></div>
+          <div class="saved-palette" style="background-color: ${color1}"></div>
           <div class="saved-palette" style="background-color: ${color2}"></div>
           <div class="saved-palette" style="background-color: ${color3}"></div>
           <div class="saved-palette" style="background-color: ${color4}"></div>
           <div class="saved-palette" style="background-color: ${color5}"></div>
+          <button class="delete-button"></button>
         </li>
       `);
 
     });
 }
+
 
 const addToSavedPalettes = () => {
   const name = $('.input-palette-name').val();
@@ -70,7 +73,24 @@ const addToSavedPalettes = () => {
   $('.input-palette-name').val('');
 };
 
+function deleteFromPalettes() {
+  const { id } = $(this).parent()[0];
+
+  if ($('.saved-items-container').find(`#${id}`).length > 1) {
+    alert('This palette belongs to a project. You must delete from Project folder')
+  } else {
+
+    fetch(`http://localhost:8000/api/v1/palettes/${id}`, {
+      method: 'DELETE'
+    })
+    .then(response => console.log('status is ' + response.status))
+
+    $(this).parent().remove();
+  }
+}
+
 $('.save-palette-button').on('click', addToSavedPalettes);
+$('.saved-palettes-list').on('click', '.delete-button', deleteFromPalettes)
 
 const appendProjects = (projectId) => {
   fetch(`http://localhost:8000/api/v1/projects/${projectId}`)
@@ -138,4 +158,17 @@ const addPaletteToProject = () => {
   addForeignKeyToPalette(paletteId, projectId);
 }
 
+function deleteFromProjects() {
+  const { id } = $(this).parent()[0]
+
+  fetch(`http://localhost:8000/api/v1/palettes/${id}`, {
+    method: 'DELETE'
+  })
+
+  $('.saved-palettes-list').find(`#${id}`).remove();
+
+  $(this).parent().remove();
+}
+
 $('.save-to-project-button').on('click', addPaletteToProject);
+$('.saved-projects-list').on('click', '.delete-button', deleteFromProjects);
