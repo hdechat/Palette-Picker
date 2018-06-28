@@ -79,7 +79,7 @@ const appendProjects = (projectId) => {
       const { id, name } = project[0];
 
       $('.saved-projects-list').append(`
-        <li class="palette" id=${id}>${name}</li>
+        <ul class="project" id=${id}>${name}</ul>
       `);
 
     });
@@ -101,7 +101,6 @@ const addToSavedProjects = () => {
 
 $('.save-project-button').on('click', addToSavedProjects);
 
-// save Palette to Project
 let selectedPalette;
 let selectedProject;
 
@@ -121,7 +120,6 @@ $('.saved-projects-list').on('click', '.project', selectProject);
 
 const addPaletteToProject = () => {
   $(selectedProject).append(selectedPalette);
-  console.log(selectedPalette)
 }
 
 $('.save-to-project-button').on('click', addPaletteToProject);
