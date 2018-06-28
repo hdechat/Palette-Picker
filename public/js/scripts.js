@@ -29,34 +29,45 @@ const generatePalette = () => {
 
 $('.generate-palette-button').on('click', generatePalette);
 
-// save palette
-function Palette() {
-  this.id = Date.now();
-  this.name = $('.input-palette-name').val();
-  this.colors = [
-    $('.box1').css('background-color'),
-    $('.box2').css('background-color'),
-    $('.box3').css('background-color'),
-    $('.box4').css('background-color'),
-    $('.box5').css('background-color')
-  ];
-}
+const appendPalettes = (paletteId) => {
+  fetch(`http://localhost:8000/api/v1/palettes/${paletteId}`)
+    .then(response => response.json())
+    .then(palette => {
+      const { id, name, color1, color2, color3, color4, color5 } = palette[0];
 
-const appendPalettes = (newPalette) => {
-  $('.saved-palettes-list').append(`
-    <li class="palette" id=${newPalette.id}>${newPalette.name}
-      <div class="saved-palette" style="background-color: ${newPalette.colors[0]}" ></div>
-      <div class="saved-palette" style="background-color: ${newPalette.colors[1]}"></div>
-      <div class="saved-palette" style="background-color: ${newPalette.colors[2]}"></div>
-      <div class="saved-palette" style="background-color: ${newPalette.colors[3]}"></div>
-      <div class="saved-palette" style="background-color: ${newPalette.colors[4]}"></div>
-    </li>
-  `);
+      $('.saved-palettes-list').append(`
+        <li class="palette" id=${id}>${name}
+          <div class="saved-palette" style="background-color: ${color1}" ></div>
+          <div class="saved-palette" style="background-color: ${color2}"></div>
+          <div class="saved-palette" style="background-color: ${color3}"></div>
+          <div class="saved-palette" style="background-color: ${color4}"></div>
+          <div class="saved-palette" style="background-color: ${color5}"></div>
+        </li>
+      `);
+
+    });
 }
 
 const addToSavedPalettes = () => {
-  let newPalette = new Palette();
-  appendPalettes(newPalette);
+  const name = $('.input-palette-name').val();
+
+  fetch('http://localhost:8000/api/v1/palettes', {
+    body: JSON.stringify({
+      name,
+      color1: $('.box1').css('background-color'),
+      color2: $('.box2').css('background-color'),
+      color3: $('.box3').css('background-color'),
+      color4: $('.box4').css('background-color'),
+      color5: $('.box5').css('background-color')
+    }),
+    method: 'POST',
+    headers: {
+      'content-type': 'application/json'
+    }
+  })
+  .then(response => response.json())
+  .then(paletteID => appendPalettes(paletteID.id));
+
   $('.input-palette-name').val('');
 };
 
@@ -72,8 +83,8 @@ const addToSavedProjects = () => {
       'content-type': 'application/json'
     }
   })
-    .then(response => response.json())
-    .then(data => console.log(data));
+  .then(response => response.json())
+  .then(data => console.log(data));
 }
 
 $('.save-project-button').on('click', addToSavedProjects);
