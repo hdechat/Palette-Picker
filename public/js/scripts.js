@@ -1,3 +1,22 @@
+// const persistData = () => {
+//   const palettesInProjects = [];
+
+//   fetch('http://localhost:8000/api/v1/palettes')
+//   .then(response => response.json())
+//   .then(palettes => palettes.forEach(palette => {
+//     appendPalettes(palette.id);
+//     if (palette.project_id) {
+//       palettesInProjects.push(palette);
+//     }
+//   }));
+
+//   fetch('http://localhost:8000/api/v1/projects')
+//   .then(response => response.json())
+//   .then(projects => projects.forEach(project => appendProjects(project.id)));  
+
+// }
+
+// $(document).ready(persistData);
 
 const getRandomHexCode = () => {
   const hexChars = '0123456789ABCDEF';

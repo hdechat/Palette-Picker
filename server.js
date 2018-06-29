@@ -143,3 +143,4 @@ app.use((request, response, next) => {
   response.status(404).send('SORRY! PAGE NOT FOUND');
 });
 
+module.exports = app
