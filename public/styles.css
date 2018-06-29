@@ -119,6 +119,16 @@ li {
   background: pink;
 }
 
+.delete-project {
+  position: relative;
+  top: 20px;
+  left: 15px;
+}
+
+.delete-project:hover {
+  color: red;
+}
+
 .saved-palette {
   border: solid thin;
   display: inline-block;

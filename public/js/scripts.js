@@ -136,7 +136,7 @@ const appendProjects = (projectId) => {
       const { id, name } = project[0];
 
       $('.saved-projects-list').append(`
-        <ul class="project" id=${id}>${name}</ul>
+        <span class="delete-project" >X</span><ul class="project" id=${id}>${name}</ul>
       `);
 
     });
