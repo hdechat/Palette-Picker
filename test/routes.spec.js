@@ -164,6 +164,30 @@ describe('API Routes', () => {
 
   //THESE WORK ONLY IF THEY ARE AT THE VERY END OF THE CODE. OTHERWISE THEY RETURN A STATUS 500
 
+  describe('GET /api/v1/projects/:id/palettes', () => {
+    it('should return the palettes of the project with the given endpoint id', done => {
+      let id;
+
+      chai.request(server)
+      .get('/api/v1/projects')
+      .end((err, response) => {
+        id = response.body[0].id;
+        done();
+      });
+
+      chai.request(server)
+      .get(`/api/v1/projects/${id}/palettes`)
+      .end((err, response) => {
+        response.should.have.status(200);
+        response.body.should.be.a('array');
+        response.body.length.should.equal(2);
+        response.body[0].should.have.propery('name');
+        response.body[0].name.should.equal('spring');
+        done();
+      });
+    });
+  });
+
   // describe('GET /api/v1/projects/:id', () => {
   //   it('should return the project with the id given in the endpoint', done => {
   //     let endpoint;
