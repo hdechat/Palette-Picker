@@ -1,22 +1,31 @@
-// const persistData = () => {
-//   const palettesInProjects = [];
+const persistData = () => {
 
-//   fetch('http://localhost:8000/api/v1/palettes')
-//   .then(response => response.json())
-//   .then(palettes => palettes.forEach(palette => {
-//     appendPalettes(palette.id);
-//     if (palette.project_id) {
-//       palettesInProjects.push(palette);
-//     }
-//   }));
+  fetch('http://localhost:8000/api/v1/palettes')
+  .then(response => response.json())
+  .then(palettes => palettes.forEach(palette => {
+    appendPalettes(palette.id);
+    if(palette.project_id) {
+      const id = palette.project_id.toString();
+      $('.saved-projects-list').append(`
+        <li class="palette" id=${palette.id}>${palette.name}
+          <div class="saved-palette" style="background-color: ${palette.color1}"></div>
+          <div class="saved-palette" style="background-color: ${palette.color2}"></div>
+          <div class="saved-palette" style="background-color: ${palette.color3}"></div>
+          <div class="saved-palette" style="background-color: ${palette.color4}"></div>
+          <div class="saved-palette" style="background-color: ${palette.color5}"></div>
+          <button class="delete-button"></button>
+        </li>
+      `)
+    }
+  }));
 
-//   fetch('http://localhost:8000/api/v1/projects')
-//   .then(response => response.json())
-//   .then(projects => projects.forEach(project => appendProjects(project.id)));  
+  fetch('http://localhost:8000/api/v1/projects')
+  .then(response => response.json())
+  .then(projects => projects.forEach(project => appendProjects(project.id)));  
 
-// }
+}
 
-// $(document).ready(persistData);
+$(document).ready(persistData);
 
 const getRandomHexCode = () => {
   const hexChars = '0123456789ABCDEF';
@@ -41,12 +50,21 @@ const generatePalette = () => {
       colorCode = getRandomHexCode();
     }
      
-    $('.box' + i).css('background-color', colorCode);
-    palette.push(colorCode);
+    if (!$('.box' + i).hasClass('lock')) { 
+      $('.box' + i).css('background-color', colorCode);
+      $('.box' + i).text(`${colorCode}`)
+      palette.push(colorCode);
+    }
   }
 };
 
 $('.generate-palette-button').on('click', generatePalette);
+$('.box1').click(() => $('.box1').toggleClass('lock'));
+$('.box2').click(() => $('.box2').toggleClass('lock'));
+$('.box3').click(() => $('.box3').toggleClass('lock'));
+$('.box4').click(() => $('.box4').toggleClass('lock'));
+$('.box5').click(() => $('.box5').toggleClass('lock'));
+
 
 const appendPalettes = (paletteId) => {
   fetch(`http://localhost:8000/api/v1/palettes/${paletteId}`)

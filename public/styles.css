@@ -2,6 +2,7 @@ body {
   margin: auto;
   text-align: center;
   width: 65vw;
+  font-family: sans-serif;
 }
 
 article h3 {
@@ -38,6 +39,16 @@ li {
   width: 100%;
 }
 
+.generate-palette-button:hover {
+  background: pink;
+}
+
+.lock {
+  background-image: url(assets/lock.png);
+  background-repeat: no-repeat;
+  background-position: bottom;
+}
+
 .input-palette-name {
   height: 35px;
   float: left;
@@ -52,6 +63,10 @@ li {
   width: 23%;
 }
 
+.save-palette-button:hover {
+  background: pink;
+}
+
 .directions {
   font-size: 20px;
   margin: 0px;
@@ -62,13 +77,17 @@ li {
   font-size: 20px;
   height: 41px;
   margin: 100px auto 0px auto;
-  width: 80%;
+  width: 100%;
+}
+
+.save-to-project-button:hover {
+  background: pink;
 }
 
 .saved-items-container {
   display: inline-block;
   margin-top: 18px;
-  width: 40%;
+  width: 49%;
 }
 
 .saved-palettes-list, .saved-projects-list {
@@ -94,6 +113,10 @@ li {
 .save-project-button {
   border-radius: 0%;
   font-size: 12px;
+}
+
+.save-project-button:hover {
+  background: pink;
 }
 
 .saved-palette {
