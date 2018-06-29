@@ -45,8 +45,6 @@ const persistData = () => {
       });
     });
   });
-  // });  
-
 }
 
 $(document).ready(persistData);
@@ -165,6 +163,8 @@ const appendProjects = (projectId) => {
 
     });
 }
+
+$('span.delete-project').on('click', () => console.log('click'))
 
 const addToSavedProjects = () => {
   const name = $('.input-project-name').val();
