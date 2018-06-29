@@ -1,27 +1,51 @@
+const getProjectsAndPalettes = (projects) => {
+  const unresolvedPromises = projects.map(project => {
+    return  fetch(`http://localhost:8000/api/v1/projects/${project.id}/palettes`) 
+            .then(response => response.json())
+            .then(palettes => {
+              return {
+                project,
+                palettes
+              }
+            }); 
+  });
+  return Promise.all(unresolvedPromises)
+};
+
 const persistData = () => {
 
   fetch('http://localhost:8000/api/v1/palettes')
   .then(response => response.json())
-  .then(palettes => palettes.forEach(palette => {
-    appendPalettes(palette.id);
-    if(palette.project_id) {
-      const id = palette.project_id.toString();
-      $('.saved-projects-list').append(`
-        <li class="palette" id=${palette.id}>${palette.name}
-          <div class="saved-palette" style="background-color: ${palette.color1}"></div>
-          <div class="saved-palette" style="background-color: ${palette.color2}"></div>
-          <div class="saved-palette" style="background-color: ${palette.color3}"></div>
-          <div class="saved-palette" style="background-color: ${palette.color4}"></div>
-          <div class="saved-palette" style="background-color: ${palette.color5}"></div>
-          <button class="delete-button"></button>
-        </li>
-      `)
-    }
-  }));
+  .then(palettes => palettes.forEach(palette => appendPalettes(palette.id)));
 
   fetch('http://localhost:8000/api/v1/projects')
   .then(response => response.json())
-  .then(projects => projects.forEach(project => appendProjects(project.id)));  
+  .then(projects => {
+    getProjectsAndPalettes(projects)
+    .then(data => {
+      data.forEach(proj => {
+        const { project, palettes } = proj;
+
+        $('.saved-projects-list').append(`
+           <span class="delete-project" >X</span><ul class="project" id=${project.id}>${project.name}</ul>
+        `)
+
+        palettes.forEach(palette => {
+          $('.saved-projects-list').append(`
+            <li class="palette" id=${palette.id}>${palette.name}
+              <div class="saved-palette" style="background-color: ${palette.color1}"></div>
+              <div class="saved-palette" style="background-color: ${palette.color2}"></div>
+              <div class="saved-palette" style="background-color: ${palette.color3}"></div>
+              <div class="saved-palette" style="background-color: ${palette.color4}"></div>
+              <div class="saved-palette" style="background-color: ${palette.color5}"></div>
+              <button class="delete-button"></button>
+             </li>
+          `)
+        });
+      });
+    });
+  });
+  // });  
 
 }
 
