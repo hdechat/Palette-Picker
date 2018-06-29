@@ -74,7 +74,10 @@ li {
 }
 
 .directions {
+  color: darkred;
   font-size: 20px;
+  font-weight: 700;
+  letter-spacing: 3px;
   margin: 0px;
 }
 
