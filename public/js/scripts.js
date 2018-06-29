@@ -1,6 +1,6 @@
 const getProjectsAndPalettes = (projects) => {
   const unresolvedPromises = projects.map(project => {
-    return  fetch(`http://localhost:8000/api/v1/projects/${project.id}/palettes`) 
+    return  fetch(`/api/v1/projects/${project.id}/palettes`) 
             .then(response => response.json())
             .then(palettes => {
               return {
@@ -14,11 +14,11 @@ const getProjectsAndPalettes = (projects) => {
 
 const persistData = () => {
 
-  fetch('http://localhost:8000/api/v1/palettes')
+  fetch('/api/v1/palettes')
   .then(response => response.json())
   .then(palettes => palettes.forEach(palette => appendPalettes(palette.id)));
 
-  fetch('http://localhost:8000/api/v1/projects')
+  fetch('/api/v1/projects')
   .then(response => response.json())
   .then(projects => {
     getProjectsAndPalettes(projects)
@@ -91,7 +91,7 @@ $('.box5').click(() => $('.box5').toggleClass('lock'));
 
 
 const appendPalettes = (paletteId) => {
-  fetch(`http://localhost:8000/api/v1/palettes/${paletteId}`)
+  fetch(`/api/v1/palettes/${paletteId}`)
     .then(response => response.json())
     .then(palette => {
       const { id, name, color1, color2, color3, color4, color5 } = palette[0];
@@ -114,7 +114,7 @@ const appendPalettes = (paletteId) => {
 const addToSavedPalettes = () => {
   const name = $('.input-palette-name').val();
 
-  fetch('http://localhost:8000/api/v1/palettes', {
+  fetch('/api/v1/palettes', {
     body: JSON.stringify({
       name,
       color1: $('.box1').css('background-color'),
@@ -141,7 +141,7 @@ function deleteFromPalettes() {
     alert('This palette belongs to a project. You must delete from Project folder')
   } else {
 
-    fetch(`http://localhost:8000/api/v1/palettes/${id}`, {
+    fetch(`/api/v1/palettes/${id}`, {
       method: 'DELETE'
     })
     .then(response => console.log('status is ' + response.status))
@@ -154,7 +154,7 @@ $('.save-palette-button').on('click', addToSavedPalettes);
 $('.saved-palettes-list').on('click', '.delete-button', deleteFromPalettes)
 
 const appendProjects = (projectId) => {
-  fetch(`http://localhost:8000/api/v1/projects/${projectId}`)
+  fetch(`/api/v1/projects/${projectId}`)
     .then(response => response.json())
     .then(project => {
       const { id, name } = project[0];
@@ -169,7 +169,7 @@ const appendProjects = (projectId) => {
 const addToSavedProjects = () => {
   const name = $('.input-project-name').val();
 
-  fetch('http://localhost:8000/api/v1/projects', {
+  fetch('/api/v1/projects', {
     body: JSON.stringify({ name }),
     method: 'POST',
     headers: {
@@ -189,7 +189,7 @@ function selectPalette() {
   $(this).css('border', 'solid thin');
   selectedPalette = $(this).clone();
 
-  fetch(`http://localhost:8000/api/v1/palettes/${this.id}`)
+  fetch(`/api/v1/palettes/${this.id}`)
   .then(response => response.json())
   .then(palette => {
     const { color1, color2, color3, color4, color5 } = palette[0];
@@ -211,7 +211,7 @@ $('.saved-items-container').on('click', '.palette', selectPalette);
 $('.saved-projects-list').on('click', '.project', selectProject);
 
 const addForeignKeyToPalette = (paletteId, projectId) => {
-  fetch(`http://localhost:8000/api/v1/palettes/${paletteId}`, {
+  fetch(`/api/v1/palettes/${paletteId}`, {
     body: JSON.stringify({ project_id: projectId }),
     method: 'PUT',
     headers: {
@@ -234,7 +234,7 @@ const addPaletteToProject = () => {
 function deleteFromProjects() {
   const { id } = $(this).parent()[0]
 
-  fetch(`http://localhost:8000/api/v1/palettes/${id}`, {
+  fetch(`/api/v1/palettes/${id}`, {
     method: 'DELETE'
   })
 
