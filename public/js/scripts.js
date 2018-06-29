@@ -81,12 +81,10 @@ const generatePalette = () => {
 };
 
 $('.generate-palette-button').on('click', generatePalette);
-$('.box1').click(() => $('.box1').toggleClass('lock'));
-$('.box2').click(() => $('.box2').toggleClass('lock'));
-$('.box3').click(() => $('.box3').toggleClass('lock'));
-$('.box4').click(() => $('.box4').toggleClass('lock'));
-$('.box5').click(() => $('.box5').toggleClass('lock'));
 
+for (let i=1; i<6; i++) {
+  $('.box' + i).click(() => $('.box' + i).toggleClass('lock'));  
+}
 
 const appendPalettes = (paletteId) => {
   fetch(`/api/v1/palettes/${paletteId}`)
@@ -194,11 +192,10 @@ function selectPalette() {
   .then(palette => {
     const { color1, color2, color3, color4, color5 } = palette[0];
 
-    $('.box1').css('background-color', color1);
-    $('.box2').css('background-color', color2);
-    $('.box3').css('background-color', color3);
-    $('.box4').css('background-color', color4);
-    $('.box5').css('background-color', color5);
+    for (let i=1; i < 6; i++) {
+      return $('.box' + i).css('background-color', color + i);
+    }
+
   });
 }
 
