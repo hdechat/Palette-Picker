@@ -186,15 +186,16 @@ let selectedProject;
 function selectPalette() {
   $(this).css('border', 'solid thin');
   selectedPalette = $(this).clone();
-
   fetch(`/api/v1/palettes/${this.id}`)
   .then(response => response.json())
   .then(palette => {
     const { color1, color2, color3, color4, color5 } = palette[0];
 
-    for (let i=1; i < 6; i++) {
-      return $('.box' + i).css('background-color', color + i);
-    }
+    $('.box1').css('background-color', color1);
+    $('.box2').css('background-color', color2);
+    $('.box3').css('background-color', color3);
+    $('.box4').css('background-color', color4);
+    $('.box5').css('background-color', color5);
 
   });
 }
