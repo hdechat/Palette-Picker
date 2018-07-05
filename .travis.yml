@@ -1,7 +1,13 @@
 language: node_js
-node_js: "9.4.0"
+node_js: 9.4.0
 services: postgresql
 before_script:
-  - psql -c 'create database palettepicker;' -U postgres
+- psql -c 'create database palettepicker;' -U postgres
 notifications:
   email: false
+deploy:
+  provider: heroku
+  api_key:
+    secure: TKY2U9u4J290ofkBA2CAGRvTo1oBnNA8QWliAC7gtvkYMgCbDS594qIPDmwYb+DxUkj0z9Mm9T46TUTJ6mdW/zCtBsR2d86v20O1euCiWzdaZB6I4qVPLXmgP5nVjo2w/mcY5xQLpfvC2CxR7xT/pQrnrcmOvZ/0lGCWPUo2EAMQCQFI/PeCLExYr9FAu0znRlsL29q97OwAAK6170uQiwLQXj3+25qL/QhhYOxEmVNRwxD6E03vbu9UrlUiAAk0GBxUxKkmm11UnMU+/SA6jmYxsGltts33mgWG4BEWi3qJx5S48pPo7sUXDcXmengCnznCD1/gNz0w2+DSt8Hm6p3sTVwPOCU+VycBFf9DCL242FR9h3Y5bpYSUfUNZd1O21A81vSXSmgSmxQcluQ3K19VX1D8ey0rVIKoBS2NM3x7vkAC9kS7ZBmVNQxFcDCQic+GVCSSTev2L8iVtLYjY+TpuIDoYlHTeM4RsOvONEB2ggNpb7lnIFJwDX2y7yIlY9lbMfvbheAtaZkYYvJ1zrv+xX+iOCdKMxtVVgHzbWwb7DiMduRf+0mOZJddQgx1Ui3/5Si3Bnw/39RlAW6OJlVH1BelFiYAr6rOYZB5ivl9MtAllGtlI4EeqscQaUKVqa9unEzDe13RwPZkPufojWc5uKIk411Fuw6bGc0JPjw=
+  app: helens-janky-colors
+  skip_cleanup: true
