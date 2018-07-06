@@ -1,13 +1,16 @@
-const getProjectsAndPalettes = (projects) => {
+const getProjectsAndPalettes = projects => {
   const unresolvedPromises = projects.map(project => {
     return  fetch(`/api/v1/projects/${project.id}/palettes`) 
-            .then(response => response.json())
-            .then(palettes => {
-              return {
-                project,
-                palettes
+            .then(response => {
+              if (response.status === 200) {
+                return response.json().then(palettes => {
+                return { project, palettes }
+                }); 
+              } else {
+                return {project, palettes: []}
               }
-            }); 
+            })
+            
   });
   return Promise.all(unresolvedPromises)
 };
@@ -166,7 +169,6 @@ $('span.delete-project').on('click', () => console.log('click'))
 
 const addToSavedProjects = () => {
   const name = $('.input-project-name').val();
-
   fetch('/api/v1/projects', {
     body: JSON.stringify({ name }),
     method: 'POST',
@@ -184,7 +186,7 @@ let selectedPalette;
 let selectedProject;
 
 function selectPalette() {
-  $(this).css('border', 'solid thin');
+  $(this).addClass('selected');
   selectedPalette = $(this).clone();
   fetch(`/api/v1/palettes/${this.id}`)
   .then(response => response.json())
@@ -201,7 +203,7 @@ function selectPalette() {
 }
 
 function selectProject() {
-  $(this).css('border', 'solid thin');
+  // $(this).addClass('selected');
   selectedProject = this;
 }
 

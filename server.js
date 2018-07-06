@@ -10,8 +10,6 @@ const environment = process.env.NODE_ENV || 'development';
 const configuration = require('./knexfile')[environment];
 const database = require('knex')(configuration);
 
-// Ignore me. You are imagining this line.
-
 app.use(express.static('public'));
 
 app.get('/', (request, response) => {});
@@ -53,7 +51,7 @@ app.get('/api/v1/projects/:id/palettes', (request, response) => {
   .then(palettes => {
     palettes.length
       ? response.status(200).json(palettes)
-      : response.sendStatus(204);
+      : response.sendStatus(200).json({});
     })
   .catch(error => response.status(500).json({ error}));
 });

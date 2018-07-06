@@ -129,6 +129,10 @@ li {
   background: pink;
 }
 
+.selected {
+  border: solid;
+}
+
 .delete-project {
   position: relative;
   top: 20px;
