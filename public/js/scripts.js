@@ -186,8 +186,11 @@ let selectedPalette;
 let selectedProject;
 
 function selectPalette() {
-  $(this).addClass('selected');
-  selectedPalette = $(this).clone();
+  $(this).toggleClass('selected');
+  $(this).hasClass('selected')
+  ? selectedPalette = $(this).clone()
+  : selectedPalette = null;
+  
   fetch(`/api/v1/palettes/${this.id}`)
   .then(response => response.json())
   .then(palette => {
@@ -203,8 +206,10 @@ function selectPalette() {
 }
 
 function selectProject() {
-  // $(this).addClass('selected');
-  selectedProject = this;
+  $(this).toggleClass('selected');
+  $(this).hasClass('selected')
+  ? selectedProject = this
+  : selectedProject = null;
 }
 
 $('.saved-items-container').on('click', '.palette', selectPalette);
@@ -229,6 +234,8 @@ const addPaletteToProject = () => {
   const projectId = selectedProject.id;
 
   addForeignKeyToPalette(paletteId, projectId);
+  $(selectedProject).toggleClass('selected');
+  $(selectedPalette).toggleClass('selected');
 }
 
 function deleteFromProjects() {
