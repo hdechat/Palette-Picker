@@ -4,7 +4,7 @@ const getProjectsAndPalettes = projects => {
             .then(response => {
               if (response.status === 200) {
                 return response.json().then(palettes => {
-                return { project, palettes }
+                  return { project, palettes }
                 }); 
               } else {
                 return {project, palettes: []}

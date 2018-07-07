@@ -51,7 +51,7 @@ app.get('/api/v1/projects/:id/palettes', (request, response) => {
   .then(palettes => {
     palettes.length
       ? response.status(200).json(palettes)
-      : response.sendStatus(200).json({});
+      : response.sendStatus(204);
     })
   .catch(error => response.status(500).json({ error}));
 });
