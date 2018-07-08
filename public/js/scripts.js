@@ -44,9 +44,9 @@ const persistData = () => {
                 <div class="saved-palette" style="background-color: ${palette.color3}"></div>
                 <div class="saved-palette" style="background-color: ${palette.color4}"></div>
                 <div class="saved-palette" style="background-color: ${palette.color5}"></div>
-                <button class="delete-button"></button>
               </section>
-             </li>
+            </li>
+            <button class="delete-button"></button>
           `)
         });
       });
@@ -134,15 +134,15 @@ const appendPalettes = (paletteId) => {
             <div class="saved-palette" style="background-color: ${color3}"></div>
             <div class="saved-palette" style="background-color: ${color4}"></div>
             <div class="saved-palette" style="background-color: ${color5}"></div>
-            <button class="delete-button"></button>
           </section>
         </li>
+        <button class="delete-button"></button>
       `);
     });
 }
 
 function deleteFromPalettes() {
-  const { id } = $(this).parent().parent()[0];
+  const { id } = $(this).prev()[0];
 
   if ($('.saved-items-container').find(`#${id}`).length > 1) {
     alert('This palette belongs to a project. You must delete from Project folder')
@@ -153,7 +153,8 @@ function deleteFromPalettes() {
     })
     .then(response => console.log('status is ' + response.status))
 
-    $(this).parent().parent().remove();
+    $(this).prev().remove();
+    $(this).remove();
   }
 }
 
@@ -257,7 +258,7 @@ const addForeignKeyToPalette = (paletteId, projectId) => {
 }
 
 const addPaletteToProject = () => {
-  $(`#${selectedProject.id}`).append(selectedPalette);
+  $(`#${selectedProject.id}`).append(selectedPalette).append(`<button class="delete-button"></button>`);
 
   const paletteId = selectedPalette[0].id;
   const projectId = selectedProject.id;
@@ -272,15 +273,17 @@ $('.save-to-project-button').on('click', addPaletteToProject);
 
 //Delete Palette from Projects
 function deleteFromProjects() {
-  const { id } = $(this).parent().parent()[0]
+  const { id } = $(this).prev()[0];
 
   fetch(`/api/v1/palettes/${id}`, {
     method: 'DELETE'
   })
 
+  $('.saved-palettes-list').find(`#${id}`).next().remove();
   $('.saved-palettes-list').find(`#${id}`).remove();
 
-  $(this).parent().parent().remove();
+  $(this).prev().remove();
+  $(this).remove();
 }
 
 $('.saved-projects-list').on('click', '.delete-button', deleteFromProjects);
