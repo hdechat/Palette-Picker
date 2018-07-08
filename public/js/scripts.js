@@ -25,7 +25,8 @@ const persistData = () => {
   fetch('/api/v1/projects')
   .then(response => response.json())
   .then(projects => {
-    getProjectsAndPalettes(projects)
+    return getProjectsAndPalettes(projects)
+  })
     .then(data => {
       data.forEach(proj => {
         const { project, palettes } = proj;
@@ -51,7 +52,6 @@ const persistData = () => {
         });
       });
     });
-  });
 }
 
 $(document).ready(persistData);
@@ -118,7 +118,14 @@ const addToSavedPalettes = () => {
   $('.input-palette-name').val('');
 };
 
+const fetchProjects = () => {
+  return fetch(`/api/v1/projects`)
+  .then(response => response.json())
+  .then(projects => projects)
+}
+
 const appendPalettes = (paletteId) => {
+  // const projects = document.querySelectorAll('.project');
 
   fetch(`/api/v1/palettes/${paletteId}`)
     .then(response => response.json())
@@ -127,6 +134,8 @@ const appendPalettes = (paletteId) => {
 
       $('.saved-palettes-list').append(`
         <li class="palette" id=${id}>
+          <select name="project" id="select-project">
+          </select>
           <p class="palette-name">${name}</p>
           <section>
             <div class="saved-palette" style="background-color: ${color1}"></div>
@@ -138,7 +147,13 @@ const appendPalettes = (paletteId) => {
         </li>
         <button class="delete-button"></button>
       `);
-    });
+      return fetchProjects()
+    })
+      .then(data => {
+        data.forEach(project => {
+          $('#select-project').append(`<option value="${project.name}">${project.name}</option>`)
+        });
+      });
 }
 
 function deleteFromPalettes() {
@@ -153,6 +168,7 @@ function deleteFromPalettes() {
     })
     .then(response => console.log('status is ' + response.status))
 
+    $(this).prev().prev().remove();
     $(this).prev().remove();
     $(this).remove();
   }
@@ -172,6 +188,7 @@ const appendProjects = (projectId) => {
         <span class="delete-project" >X</span><ul class="project" id=${id}>${name}</ul>
       `);
 
+      $('#select-project').append(`<option value="${name}">${name}</option>`)
     });
 }
 
@@ -186,6 +203,8 @@ const addToSavedProjects = () => {
   })
   .then(response => response.json())
   .then(data => appendProjects(data.id));
+
+  $('.input-project-name').val('')
 }
 
 function deleteFromSavedProjects() {
@@ -258,15 +277,18 @@ const addForeignKeyToPalette = (paletteId, projectId) => {
 }
 
 const addPaletteToProject = () => {
-  $(`.project#${selectedProject.id}`).append(selectedPalette).append(`<button class="delete-button"></button>`);
-
   const paletteId = selectedPalette[0].id;
   const projectId = selectedProject.id;
+
+  $(`.project#${projectId}`)
+    .append(selectedPalette)
+    .append(`<button class="delete-button"></button>`);
 
   addForeignKeyToPalette(paletteId, projectId);
   $(selectedProject).toggleClass('selected');
   $(selectedPalette).toggleClass('selected');
-  $(`#${paletteId}`).toggleClass('selected')
+  $(`#${paletteId}`).toggleClass('selected');
+  $('.project').find('select').hide();
 }
 
 $('.save-to-project-button').on('click', addPaletteToProject);

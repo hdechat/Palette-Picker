@@ -157,6 +157,10 @@ li {
   border: solid;
 }
 
+.isHidden {
+  display: none;
+}
+
 .delete-project {
   cursor: pointer;
   font-size: 25px;
