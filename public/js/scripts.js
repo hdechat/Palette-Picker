@@ -142,7 +142,7 @@ const appendPalettes = (paletteId) => {
 }
 
 function deleteFromPalettes() {
-  const { id } = $(this).parent()[0];
+  const { id } = $(this).parent().parent()[0];
 
   if ($('.saved-items-container').find(`#${id}`).length > 1) {
     alert('This palette belongs to a project. You must delete from Project folder')
@@ -153,7 +153,7 @@ function deleteFromPalettes() {
     })
     .then(response => console.log('status is ' + response.status))
 
-    $(this).parent().remove();
+    $(this).parent().parent().remove();
   }
 }
 
