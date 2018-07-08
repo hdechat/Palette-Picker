@@ -14,12 +14,20 @@ article h3 {
   margin: 0;
 }
 
+p {
+  font-size: 25px;
+  margin: 0;
+}
+
 ul {
   list-style: none;
 }
 
 li {
+  display: flex;
+  justify-content: space-between;
   margin-left: 5px;
+
 }
 
 .title {
@@ -109,6 +117,16 @@ li {
   text-align: left;
   vertical-align: top;
   width: 100%;
+}
+
+.palette:hover {
+  background: pink;
+  cursor: pointer;
+}
+
+.project:hover {
+  background: pink;
+  cursor: pointer;
 }
 
 .create-new-project {
