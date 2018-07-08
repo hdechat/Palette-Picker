@@ -257,8 +257,7 @@ const addForeignKeyToPalette = (paletteId, projectId) => {
 }
 
 const addPaletteToProject = () => {
-  console.log(selectedProject)
-  $(selectedProject).append(selectedPalette);
+  $(`#${selectedProject.id}`).append(selectedPalette);
 
   const paletteId = selectedPalette[0].id;
   const projectId = selectedProject.id;
