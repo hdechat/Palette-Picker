@@ -94,6 +94,23 @@ for (let i=1; i<6; i++) {
   $('.box' + i).click(() => $('.box' + i).toggleClass('lock'));  
 }
 
+const changeGeneratorColors = id => {
+  fetch(`/api/v1/palettes/${id}`)
+  .then(response => response.json())
+  .then(palette => {
+    const { color1, color2, color3, color4, color5 } = palette[0];
+
+    $('.box1').css('background-color', color1);
+    $('.box2').css('background-color', color2);
+    $('.box3').css('background-color', color3);
+    $('.box4').css('background-color', color4);
+    $('.box5').css('background-color', color5);
+
+  });
+}
+
+$('.saved-items-container').on('click', '.palette', function(){changeGeneratorColors(this.id)});
+
 //Palettes
 const addToSavedPalettes = () => {
   const name = $('.input-palette-name').val();
@@ -169,7 +186,6 @@ function deleteFromPalettes() {
     })
     .then(response => console.log('status is ' + response.status))
 
-    $(this).prev().prev().remove();
     $(this).prev().remove();
     $(this).remove();
   }
@@ -244,37 +260,6 @@ $('.saved-projects-list').on('click', 'span', deleteFromSavedProjects);
 let selectedPalette;
 let selectedProject;
 
-const changeGeneratorColors = id => {
-  fetch(`/api/v1/palettes/${id}`)
-  .then(response => response.json())
-  .then(palette => {
-    const { color1, color2, color3, color4, color5 } = palette[0];
-
-    $('.box1').css('background-color', color1);
-    $('.box2').css('background-color', color2);
-    $('.box3').css('background-color', color3);
-    $('.box4').css('background-color', color4);
-    $('.box5').css('background-color', color5);
-
-  });
-}
-
-function selectPalette() {
-  changeGeneratorColors(this.id)
-}
-
-function selectProject(event) {
-  selectedProject = $('.saved-projects-list')
-    .find(`ul:contains(${event.target.value})`)[0];
-  selectedPalette = $(this).parent().clone();
-  console.log(selectedProject)
-  console.log(selectedPalette)
-}
-
-$('.saved-items-container').on('click', '.palette', selectPalette);
-$('.saved-palettes-list').on('change', 'select', selectProject);
-
-
 const addForeignKeyToPalette = (paletteId, projectId) => {
   fetch(`/api/v1/palettes/${paletteId}`, {
     body: JSON.stringify({ project_id: projectId }),
@@ -288,7 +273,6 @@ const addForeignKeyToPalette = (paletteId, projectId) => {
 }
 
 const addPaletteToProject = () => {
-  console.log(selectedPalette, selectedProject)
   const paletteId = selectedPalette[0].id;
   const projectId = selectedProject.id;
 
@@ -300,7 +284,15 @@ const addPaletteToProject = () => {
   $('.project').find('select').hide();
 }
 
-$('.save-to-project-button').on('click', addPaletteToProject);
+function selectProject(event) {
+  selectedProject = $('.saved-projects-list')
+    .find(`ul:contains(${event.target.value})`)[0];
+  selectedPalette = $(this).parent().clone();
+  addPaletteToProject();
+}
+
+
+$('.saved-palettes-list').on('change', 'select', selectProject);
 
 //Delete Palette from Projects
 function deleteFromProjects() {
