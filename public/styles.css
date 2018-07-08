@@ -26,7 +26,7 @@ ul {
 li {
   display: flex;
   justify-content: space-between;
-  margin: 1px 25px;
+  margin: 1px 40px;
 
 }
 
@@ -182,7 +182,10 @@ li {
   background-image: url(assets/grey-trash-can.png);
   background-repeat: no-repeat;
   border: none;
+  bottom: 32px;
+  float: right;
   height: 30px;
+  position: relative;
   vertical-align: bottom;
   width: 30px;
 }
