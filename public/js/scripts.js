@@ -186,7 +186,6 @@ function deleteFromPalettes() {
     })
     .then(response => console.log('status is ' + response.status))
 
-    $(this).prev().prev().remove();
     $(this).prev().remove();
     $(this).remove();
   }
