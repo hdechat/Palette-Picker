@@ -195,6 +195,8 @@ $('.save-palette-button').on('click', addToSavedPalettes);
 $('.saved-palettes-list').on('click', '.delete-button', deleteFromPalettes)
 
 //Projects
+let projectNames = []
+
 const appendProjects = (projectId) => {
 
   fetch(`/api/v1/projects/${projectId}`)
@@ -216,17 +218,26 @@ const appendProjects = (projectId) => {
 
 const addToSavedProjects = () => {
   const name = $('.input-project-name').val();
-  fetch('/api/v1/projects', {
-    body: JSON.stringify({ name }),
-    method: 'POST',
-    headers: {
-      'content-type': 'application/json'
-    }
-  })
-  .then(response => response.json())
-  .then(data => appendProjects(data.id));
+  const dupe = projectNames.find(projName => projName === name);
 
-  $('.input-project-name').val('')
+  if (dupe) {
+    alert('Duplicate name!')
+    $('.input-project-name').val('').focus()
+  } else {
+    projectNames.push(name)
+
+    fetch('/api/v1/projects', {
+      body: JSON.stringify({ name }),
+      method: 'POST',
+      headers: {
+        'content-type': 'application/json'
+      }
+    })
+    .then(response => response.json())
+    .then(data => appendProjects(data.id));
+
+    $('.input-project-name').val('')
+  }
 }
 
 function deleteFromSavedProjects() {
@@ -287,6 +298,7 @@ const addPaletteToProject = () => {
 function selectProject(event) {
   selectedProject = $('.saved-projects-list')
     .find(`ul#${event.target.value}`)[0];
+
   selectedPalette = $(this).parent().clone();
   addPaletteToProject();
 }
