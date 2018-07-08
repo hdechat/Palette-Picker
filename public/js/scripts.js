@@ -169,7 +169,7 @@ const appendPalettes = (paletteId) => {
       .then(data => {
         data.forEach(project => {
           $(`#select-project-${paletteId}`)
-          .append(`<option value="${project.name}">${project.name}</option>`)
+          .append(`<option value="${project.id}">${project.name}</option>`)
         });
       });
 }
@@ -286,11 +286,10 @@ const addPaletteToProject = () => {
 
 function selectProject(event) {
   selectedProject = $('.saved-projects-list')
-    .find(`ul:contains(${event.target.value})`)[0];
+    .find(`ul#${event.target.value}`)[0];
   selectedPalette = $(this).parent().clone();
   addPaletteToProject();
 }
-
 
 $('.saved-palettes-list').on('change', 'select', selectProject);
 
