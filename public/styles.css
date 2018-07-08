@@ -134,6 +134,7 @@ li {
 }
 
 .delete-project {
+  cursor: pointer;
   position: relative;
   top: 20px;
   left: 15px;
