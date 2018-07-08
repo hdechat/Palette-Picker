@@ -257,6 +257,7 @@ const addForeignKeyToPalette = (paletteId, projectId) => {
 }
 
 const addPaletteToProject = () => {
+  console.log(selectedProject)
   $(selectedProject).append(selectedPalette);
 
   const paletteId = selectedPalette[0].id;
@@ -272,7 +273,7 @@ $('.save-to-project-button').on('click', addPaletteToProject);
 
 //Delete Palette from Projects
 function deleteFromProjects() {
-  const { id } = $(this).parent()[0]
+  const { id } = $(this).parent().parent()[0]
 
   fetch(`/api/v1/palettes/${id}`, {
     method: 'DELETE'
@@ -280,7 +281,7 @@ function deleteFromProjects() {
 
   $('.saved-palettes-list').find(`#${id}`).remove();
 
-  $(this).parent().remove();
+  $(this).parent().parent().remove();
 }
 
 $('.saved-projects-list').on('click', '.delete-button', deleteFromProjects);

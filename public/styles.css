@@ -124,6 +124,10 @@ li {
   cursor: pointer;
 }
 
+.project {
+  font-size: 25px;
+}
+
 .project:hover {
   background: pink;
   cursor: pointer;
@@ -134,13 +138,13 @@ li {
 }
 
 .input-project-name {
-  font-size: 12px;
+  font-size: 16px;
   width: 60%;
 }
 
 .save-project-button {
   border-radius: 0%;
-  font-size: 12px;
+  font-size: 16px;
 }
 
 .save-project-button:hover {
@@ -153,8 +157,9 @@ li {
 
 .delete-project {
   cursor: pointer;
+  font-size: 25px;
   position: relative;
-  top: 20px;
+  top: 29px;
   left: 15px;
 }
 
