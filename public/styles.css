@@ -166,19 +166,17 @@ select {
 }
 
 .delete-project {
-  cursor: pointer;
-  font-size: 25px;
-  position: relative;
-  top: 29px;
-  left: 15px;
-}
-
-.delete-project {
   background-color: transparent;
   background-image: url(assets/grey-trash-can.png);
   background-repeat: no-repeat;
+  background-size: 20px;
   border: none;
+  cursor: pointer;
+  font-size: 25px;
   height: 1em;
+  left: 15px;
+  position: relative;
+  top: 29px;
   width: 1em;
 }
 
