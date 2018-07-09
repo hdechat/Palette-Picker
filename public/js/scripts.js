@@ -32,7 +32,7 @@ const persistData = () => {
         const { project, palettes } = proj;
 
         $('.saved-projects-list').append(`
-           <span class="delete-project" >X</span><ul class="project" id=${project.id}>${project.name}</ul>
+           <button class="delete-project" ></button><ul class="project" id=${project.id}>${project.name}</ul>
         `)
 
         palettes.forEach(palette => {
@@ -206,7 +206,7 @@ const appendProjects = (projectId) => {
 
       $('.saved-projects-list')
         .append(`
-          <span class="delete-project" >X</span>
+          <button class="delete-project" ></button>
           <ul class="project" id=${id}>${name}</ul>
         `);
 
@@ -265,7 +265,7 @@ function deleteFromSavedProjects() {
 }
 
 $('.save-project-button').on('click', addToSavedProjects);
-$('.saved-projects-list').on('click', 'span', deleteFromSavedProjects);
+$('.saved-projects-list').on('click', '.delete-project', deleteFromSavedProjects);
 
 //Add Palette to Project
 let selectedPalette;
